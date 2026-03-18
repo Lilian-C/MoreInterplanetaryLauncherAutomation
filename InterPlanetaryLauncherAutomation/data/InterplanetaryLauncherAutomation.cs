@@ -31,23 +31,11 @@ namespace InterPlanetaryLauncherAutomation
             if (railgun == null) railgun = GameObject.FindObjectOfType<RailGun>();
         }
 
-        private void OnCopySettings(object data)
-        {
-            /*
-                InterplanetaryLauncherAutomation component = ((GameObject) data).GetComponent<InterplanetaryLauncherAutomation>();
-                if (!((UnityEngine.Object) component != (UnityEngine.Object) null))
-                return;
-                this.ActivateValue = component.ActivateValue;
-                this.DeactivateValue = component.DeactivateValue;
-            */
-        }
-
         protected override void OnSpawn()
         {
             base.OnSpawn();
             this.Subscribe<InterplanetaryLauncherAutomation>(-801688580, OnLogicValueChangedDelegate);
             this.Subscribe<InterplanetaryLauncherAutomation>(-1837862626, UpdateLogicCircuitDelegate);
-            // Initialize the logic circuit state
             this.UpdateLogicCircuit(null);
         }
 
@@ -63,8 +51,6 @@ namespace InterPlanetaryLauncherAutomation
             if (logicPorts != null)
             {
                 logicPorts.SendSignal(SmartReservoir.PORT_ID, flag ? 1 : 0);
-                
-                // Send signal for radbolts empty status (1 = empty, 0 = has radbolts)
                 bool isEmpty = railgun.CurrentEnergy <= 0f;
                 logicPorts.SendSignal(RADBOLTS_EMPTY_PORT_ID, isEmpty ? 1 : 0);
             }
